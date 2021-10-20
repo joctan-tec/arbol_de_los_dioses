@@ -7,6 +7,9 @@ vuelven.  Dicha  lucha  es  determinada  por  el
 gran  mazo  del  destino  el  cual  determina  la 
 suerte echada para los dioses y los fieles. 
 
+El  mazo  del  destino  es  un  conjunto  de  40 
+cartas con los hechos para los dioses:
+
 ![image](https://user-images.githubusercontent.com/78829208/138017207-30dc9cc7-f4a0-48ea-9a18-61b3ae03738e.png)
 
 De esta forma el mazo va dictando la fortuna 
