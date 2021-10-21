@@ -1,0 +1,85 @@
+{
+    "dioses":
+    [
+      { 
+        "nombre":       "Zulay",
+        "fieles":       "500"
+      },
+      { 
+        "nombre":       "Sonia",
+        "fieles":       "750"
+      },
+      { 
+        "nombre":       "Camila",
+        "fieles":       "800"
+      },
+      { 
+        "nombre":       "Melany",
+        "fieles":       "700"
+      },
+      { 
+        "nombre":       "Jimena",
+        "fieles":       "600"
+      },
+      { 
+        "nombre":       "Rosa",
+        "fieles":       "450"
+      },
+      { 
+        "nombre":       "Sandy",
+        "fieles":       "1500"
+      },
+      { 
+        "nombre":       "Girlany",
+        "fieles":       "1100"
+      },
+      { 
+        "nombre":       "Mariangel",
+        "fieles":       "1400"
+      },
+      { 
+        "nombre":       "Natalia",
+        "fieles":       "7400"
+      },
+      { 
+        "nombre":       "Nayat",
+        "fieles":       "10000"
+      },
+      { 
+        "nombre":       "Ashly",
+        "fieles":       "15200"
+      },
+      { 
+        "nombre":       "Michelle",
+        "fieles":       "785000"
+      },
+      { 
+        "nombre":       "Rouss",
+        "fieles":       "15600"
+      },
+      { 
+        "nombre":       "Megan",
+        "fieles":       "85000"
+      },
+      { 
+        "nombre":       "Yessenia",
+        "fieles":       "95000"
+      },
+      { 
+        "nombre":       "Dixiana",
+        "fieles":       "557000"
+      },
+      { 
+        "nombre":       "Sofia",
+        "fieles":       "456900"
+      },
+      { 
+        "nombre":       "Diana",
+        "fieles":       "18500"
+      },
+      { 
+        "nombre":       "Dayanara",
+        "fieles":       "165000"
+      }
+    ]
+}
