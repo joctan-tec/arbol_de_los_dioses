@@ -50,6 +50,32 @@ public:
     }
 
 
+    Dios cartaTraicion(Dios ganador){
+        int veintePorciento = fieles*0.3;
+        
+
+        fieles-=veintePorciento;
+        ganador.setFieles(ganador.getFieles()+veintePorciento);
+        
+        return ganador;
+    }
+
+
+    Dios cartaNuevoDios(Dios pDiosB){
+        return Dios(pDiosB.getFieles()+fieles,"Hijo de "+pDiosB.getNombre()+" y "+nombre);
+    }
+
+
+    void cartaMuerte(){
+        fieles-=fieles*0.1;
+    }
+
+
+
+
+    
+
+
     
 };
 
