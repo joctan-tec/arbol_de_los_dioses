@@ -1,0 +1,355 @@
+#ifndef _NODOAVL_
+#define _NODOAVL_ 1
+
+#include <iostream>
+using namespace std;
+
+#include "Dioses.h"
+
+// Clase Nodo de Arbol AVL:
+class Nodo {
+  public:
+     // Constructor:
+     Nodo(Dios* dat, Nodo* pad=nullptr, Nodo* izq=nullptr, Nodo* der=nullptr):
+          dato(dat), padre(pad), izquierdo(izq), derecho(der), FE(0) {}
+     // Miembros:
+     Dios* dato;
+     int FE;
+     Nodo* izquierdo;
+     Nodo* derecho;
+     Nodo* padre;
+     friend class AVL;
+};
+
+class AVL{
+     private:
+          enum {IZQUIERDO, DERECHO};
+          // Punteros de la lista, para la raiz y nodo actual:
+          Nodo* raiz;
+          Nodo* actual;
+          Nodo* borrado;
+          int contador;
+          int altura;
+
+     public:
+          //Constructor
+          AVL(): raiz(nullptr), actual(nullptr) {}
+
+          //Verifica vacio
+          bool Vacio(Nodo* nodo) { 
+               return nodo == nullptr; 
+          }
+
+          // Comprobar si es un nodo hoja
+          bool EsHoja(Nodo* nodo) { 
+               return !nodo->derecho && !nodo->izquierdo; 
+          }
+
+          //Insertar
+          void Insertar(Dios* dat){
+               Nodo *padre = nullptr;
+
+               cout << "Insertar: " << dat->getFieles() << endl;
+               actual = raiz;
+               // Buscar el dato en el arbol, manteniendo un puntero al nodo padre
+               while( !Vacio(actual) && dat->getFieles() != actual->dato->getFieles() ) {  //modificar nodo
+                    padre = actual;
+                    if( dat->getFieles() > actual->dato->getFieles() ) actual = actual->derecho;
+                    else if( dat->getFieles() < actual->dato->getFieles() ) actual = actual->izquierdo;
+               }
+
+               // Si el elemento es igual a la raiz
+               // se inserta a la izquierda
+               if (actual != nullptr){
+                    if ( dat->getFieles() == actual->dato->getFieles() ){
+                         padre = actual;
+                         if ( dat->getFieles() == actual->dato->getFieles() ) actual = actual->izquierdo;
+                    }
+               }
+               // Si se ha encontrado el elemento, regresar sin insertar
+               if(!Vacio(actual)){   
+                    return;
+               }
+               // Si padre es nulo, entonces el arbol estaba vacio, el nuevo nodo sera
+               // el nodo raiz
+               if(Vacio(padre)) raiz = new Nodo(dat);
+               // Si el dato es menor que el que contiene el nodo padre, lo insertamos
+               // en la rama izquierda
+               else if(dat->getFieles() <= padre->dato->getFieles()) {
+                    padre->izquierdo = new Nodo(dat, padre);
+                    EquilibrarArbol(padre, IZQUIERDO, true);
+               }
+               // Si el dato es mayor que el que contiene el nodo padre, lo insertamos
+               // en la rama derecha
+               else if(dat->getFieles() > padre->dato->getFieles()) {
+                    padre->derecho = new Nodo(dat, padre);
+                    EquilibrarArbol(padre, DERECHO, true);
+               }
+          }
+
+          // Equilibrar arbol AVL partiendo del nodo nuevo
+          void EquilibrarArbol(Nodo* nodo, int rama, bool nuevo){
+               bool salir = false;
+
+               // Recorrer camino inverso actualizando valores de FE:
+               while(nodo && !salir) {
+                    if(nuevo)
+                    if(rama == IZQUIERDO) nodo->FE--; // Depende de si anadimos ...
+                    else                  nodo->FE++;
+                    else
+                    if(rama == IZQUIERDO) nodo->FE++; // ... o borramos
+                    else                  nodo->FE--;
+                    if(nodo->FE == 0) salir = true; // La altura de las rama que
+                                                  // empieza en nodo no ha variado,
+                                                  // salir de equilibrar
+                    else if(nodo->FE == -2) { // Rotar a derechas y salir:
+                         if(nodo->izquierdo->FE == 1) RDD(nodo); // Rotacion doble
+                         else RSD(nodo);                         // Rotacion simple
+                         salir = true;
+                    }
+                    else if(nodo->FE == 2) {  // Rotar a izquierdas y salir:
+                         if(nodo->derecho->FE == -1) RDI(nodo); // Rotacion doble
+                         else RSI(nodo);                        // Rotacion simple
+                         salir = true;
+                    }
+                    if(nodo->padre) 
+                    if(nodo->padre->derecho == nodo) rama = DERECHO; else rama = IZQUIERDO;
+                    nodo = nodo->padre; // Calcular FE, siguiente nodo del camino.
+               }   
+          }
+
+          // Rotacion doble a derechas
+          void RDD(Nodo* nodo) {
+               cout << "RDD" << endl;
+               Nodo *Padre = nodo->padre;
+               Nodo *P = nodo;
+               Nodo *Q = P->izquierdo;
+               Nodo *R = Q->derecho;
+               Nodo *B = R->izquierdo;
+               Nodo *C = R->derecho;
+
+               if(Padre) 
+                    if(Padre->derecho == nodo) Padre->derecho = R;
+                    else Padre->izquierdo = R;
+               else raiz = R;
+
+               // Reconstruir arbol:
+               Q->derecho = B;
+               P->izquierdo = C;
+               R->izquierdo = Q;
+               R->derecho = P;
+               
+               // Reasignar padres:
+               R->padre = Padre;
+               P->padre = Q->padre = R;
+               if(B) B->padre = Q;
+               if(C) C->padre = P;
+
+               // Ajustar valores de FE:
+               switch(R->FE) {
+                    case -1: Q->FE = 0; P->FE = 1; break;
+                    case 0:  Q->FE = 0; P->FE = 0; break;
+                    case 1:  Q->FE = -1; P->FE = 0; break;
+               }
+               R->FE = 0;
+          }
+
+          // Rotacion simple a derechas
+          void RSD(Nodo* nodo) {
+               cout << "RSD" << endl;
+               Nodo *Padre = nodo->padre;
+               Nodo *P = nodo;
+               Nodo *Q = P->izquierdo;
+               Nodo *B = Q->derecho;
+
+               if(Padre) 
+                    if(Padre->derecho == P) Padre->derecho = Q;
+                    else Padre->izquierdo = Q;
+               else raiz = Q;
+
+               // Reconstruir arbol:
+               P->izquierdo = B;
+               Q->derecho = P;
+               
+               // Reasignar padres:
+               P->padre = Q;
+               if(B) B->padre = P;
+               Q->padre = Padre;
+
+               // Ajustar valores de FE:
+               P->FE = 0;
+               Q->FE = 0;
+          }
+
+          // Rotacion doble a izquierdas
+          void RDI(Nodo* nodo) {
+               cout << "RDI" << endl;
+               Nodo *Padre = nodo->padre;
+               Nodo *P = nodo;
+               Nodo *Q = P->derecho;
+               Nodo *R = Q->izquierdo;
+               Nodo *B = R->izquierdo;
+               Nodo *C = R->derecho;
+
+               if(Padre)
+                    if(Padre->derecho == nodo) Padre->derecho = R;
+                    else Padre->izquierdo = R;
+               else raiz = R;
+
+               // Reconstruir arbol:
+               P->derecho = B;
+               Q->izquierdo = C;
+               R->izquierdo = P;
+               R->derecho = Q;
+               
+               // Reasignar padres:
+               R->padre = Padre;
+               P->padre = Q->padre = R;
+               if(B) B->padre = P;
+               if(C) C->padre = Q;
+
+               // Ajustar valores de FE:
+               switch(R->FE) {
+                    case -1: P->FE = 0; Q->FE = 1; break;
+                    case 0:  P->FE = 0; Q->FE = 0; break;
+                    case 1:  P->FE = -1; Q->FE = 0; break;
+               }
+               R->FE = 0;
+          }
+
+          // Rotacion simple a izquierdas
+          void RSI(Nodo* nodo) {
+               cout << "RSI" << endl;
+               Nodo *Padre = nodo->padre;
+               Nodo *P = nodo;
+               Nodo *Q = P->derecho;
+               Nodo *B = Q->izquierdo;
+
+               if(Padre) 
+                    if(Padre->derecho == P) Padre->derecho = Q;
+                    else Padre->izquierdo = Q;
+               else raiz = Q;
+
+               // Reconstruir arbol:
+               P->derecho = B;
+               Q->izquierdo = P;
+               
+               // Reasignar padres:
+               P->padre = Q;
+               if(B) B->padre = P;
+               Q->padre = Padre;
+               
+               // Ajustar valores de FE:
+               P->FE = 0;
+               Q->FE = 0;
+          }
+
+          // Buscar un valor en el arbol
+          bool Buscar(Dios* dat) {
+               actual = raiz;
+
+               // Todavia puede aparecer, ya que quedan nodos por mirar
+               while(!Vacio(actual)) {
+                    if(dat->getFieles() == actual->dato->getFieles()) {return true;} // dato encontrado
+                    else if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;} // Seguir
+                    else if(dat->getFieles() < actual->dato->getFieles()) {actual = actual->izquierdo;}
+               }
+               return false; // No esta en arbol
+          }
+
+
+          // Eliminar un elemento de un arbol AVL
+          Nodo* Borrar(Dios* dat) {
+               Nodo *padre = nullptr;
+               Nodo *nodo;
+               Dios* aux;
+
+               actual = raiz;
+               // Mientras sea posible que el valor esta en el arbol
+               while (!Vacio(actual)) {
+                    if (dat->getFieles() == actual->dato->getFieles()) { // Si el valor esta en el nodo actual
+                         if (EsHoja(actual)) { // Y si ademas es un nodo hoja: lo borramos
+                              if(padre) // Si tiene padre (no es el nodo raiz)
+                                   // Anulamos el puntero que le hace referencia
+                                   if (padre->derecho == actual) padre->derecho = nullptr;
+                                   else if(padre->izquierdo == actual) padre->izquierdo = nullptr;
+                              //borrado = actual->padre;
+                              delete actual; // Borrar el nodo
+                              actual = nullptr;
+                              // El nodo padre del actual puede ser ahora un nodo hoja, por lo tanto su
+                              // FE es cero, pero debemos seguir el camino a partir de su padre, si existe.
+                              if((padre->derecho == actual && padre->FE == 1) ||
+                                   (padre->izquierdo == actual && padre->FE == -1)) {
+                                   padre->FE = 0;
+                                   actual = padre;
+                                   padre = actual->padre;
+                              }
+                              if(padre)
+                                   if(padre->derecho == actual) EquilibrarArbol(padre, DERECHO, false);
+                                   else                         EquilibrarArbol(padre, IZQUIERDO, false);
+                              return borrado;
+                         }
+                         else { // Si el valor esta en el nodo actual, pero no es hoja
+                              // Buscar nodo
+                              padre = actual;
+                              // Buscar nodo mas izquierdo de rama derecha
+                              if(actual->derecho) {
+                                   nodo = actual->derecho;
+                                   while(nodo->izquierdo) {
+                                        padre = nodo;
+                                        nodo = nodo->izquierdo;
+                                   }
+                              }
+                              // O buscar nodo mas derecho de rama izquierda
+                              else {
+                                   nodo = actual->izquierdo;
+                                   while(nodo->derecho) {
+                                        padre = nodo;
+                                        nodo = nodo->derecho;
+                                   }
+                              }
+                              // Intercambiar valores de nodo a borrar u nodo encontrado
+                              // y continuar, cerrando el bucle. El nodo encontrado no tiene
+                              // por que ser un nodo hoja, cerrando el bucle nos aseguramos
+                              // de que solo se eliminan nodos hoja.
+                              aux = actual->dato;
+                              actual->dato = nodo->dato;
+                              nodo->dato = aux;
+                              actual = nodo;
+                         }
+                    }
+                    else { // Todavia no hemos encontrado el valor, seguir buscandolo
+                         padre = actual;
+                         if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;}
+                         else if(dat->getFieles() < actual->dato->getFieles()) {actual = actual->izquierdo;}
+                    }
+               }
+               return borrado;
+          }
+
+          // Recorrido de arbol en postorden, aplicamos la funcion func, que tiene
+          // el prototipo:
+          // void func(int&, int);
+          void PostOrden(void (*func)(Nodo*, int), Nodo* nodo, bool r) {
+               if(r){
+                    nodo = raiz;
+               }
+               if(nodo->izquierdo) {
+                    PostOrden(func, nodo->izquierdo, false);
+               }
+               if(nodo->derecho) {
+                    PostOrden(func, nodo->derecho, false);
+               }
+               func( nodo, nodo->FE );
+          }
+
+
+          // ANARQUIA
+          // AVL cartaAnarquia(Dios* arbol){
+          //      Nodo* recienBorrado = Borrar(arbol);
+          //      AVL nuevoArbolAnarquico;
+          //      nuevoArbolAnarquico.Insertar(borrado);
+          // }
+};
+
+#endif
