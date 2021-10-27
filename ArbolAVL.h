@@ -27,7 +27,7 @@ class AVL{
           // Punteros de la lista, para la raiz y nodo actual:
           Nodo* raiz;
           Nodo* actual;
-          Nodo* borrado;
+          Nodo* borrado1;
           int contador;
           int altura;
 
@@ -55,7 +55,7 @@ class AVL{
                while( !Vacio(actual) && dat->getFieles() != actual->dato->getFieles() ) {  //modificar nodo
                     padre = actual;
                     if( dat->getFieles() > actual->dato->getFieles() ) actual = actual->derecho;
-                    else if( dat->getFieles() < actual->dato->getFieles() ) actual = actual->izquierdo;
+                    else if( dat->getFieles() <= actual->dato->getFieles() ) actual = actual->izquierdo;
                }
 
                // Si el elemento es igual a la raiz
@@ -250,11 +250,18 @@ class AVL{
 
                // Todavia puede aparecer, ya que quedan nodos por mirar
                while(!Vacio(actual)) {
-                    if(dat->getFieles() == actual->dato->getFieles()) {return true;} // dato encontrado
+                    if(dat->getFieles() == actual->dato->getFieles() && dat->getNombre() == actual->dato->getNombre()) {return true;} // dato encontrado
                     else if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;} // Seguir
-                    else if(dat->getFieles() < actual->dato->getFieles()) {actual = actual->izquierdo;}
+                    else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                }
                return false; // No esta en arbol
+          }
+
+
+          void guardaBorrado(Nodo* nodo){
+               Nodo* borrado = (Nodo*)malloc(sizeof(Nodo));
+               borrado = nodo;
+               borrado1 = borrado;
           }
 
 
@@ -267,14 +274,15 @@ class AVL{
                actual = raiz;
                // Mientras sea posible que el valor esta en el arbol
                while (!Vacio(actual)) {
-                    if (dat->getFieles() == actual->dato->getFieles()) { // Si el valor esta en el nodo actual
+                    if (dat->getFieles() == actual->dato->getFieles() && dat->getNombre() == actual->dato->getNombre()) { // Si el valor esta en el nodo actual
+                         guardaBorrado(actual);
                          if (EsHoja(actual)) { // Y si ademas es un nodo hoja: lo borramos
                               if(padre) // Si tiene padre (no es el nodo raiz)
                                    // Anulamos el puntero que le hace referencia
                                    if (padre->derecho == actual) padre->derecho = nullptr;
                                    else if(padre->izquierdo == actual) padre->izquierdo = nullptr;
-                              //borrado = actual->padre;
-                              delete actual; // Borrar el nodo
+                              //guardaBorrado(actual);
+                              //delete actual; // Borrar el nodo
                               actual = nullptr;
                               // El nodo padre del actual puede ser ahora un nodo hoja, por lo tanto su
                               // FE es cero, pero debemos seguir el camino a partir de su padre, si existe.
@@ -287,7 +295,7 @@ class AVL{
                               if(padre)
                                    if(padre->derecho == actual) EquilibrarArbol(padre, DERECHO, false);
                                    else                         EquilibrarArbol(padre, IZQUIERDO, false);
-                              return borrado;
+                              return borrado1;
                          }
                          else { // Si el valor esta en el nodo actual, pero no es hoja
                               // Buscar nodo
@@ -321,10 +329,10 @@ class AVL{
                     else { // Todavia no hemos encontrado el valor, seguir buscandolo
                          padre = actual;
                          if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;}
-                         else if(dat->getFieles() < actual->dato->getFieles()) {actual = actual->izquierdo;}
+                         else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                     }
                }
-               return borrado;
+               return borrado1;
           }
 
           // Recorrido de arbol en postorden, aplicamos la funcion func, que tiene
@@ -344,11 +352,41 @@ class AVL{
           }
 
 
-          // ANARQUIA
-          // AVL cartaAnarquia(Dios* arbol){
+          //ANARQUIA
+          // Aun se debe checkear unas cosas al retornar y el valor que se da en el .cpp
+          // Reparar algunos errores para que tome todo el nodo como un nodo padre (raiz,izquierdo,derecha)
+          AVL cartaAnarquia(Dios* arbol){
+               Nodo* aux;
+               Nodo* eliminados;
+
+               //se debe verificar que no sea nullptr o revisar el metodo Borrar
+               Nodo* recienBorrado = Borrar(arbol);
+               //aux = recienBorrado;
+
+               Dios nuevoDios = *(borrado1->dato);
+               aux = borrado1;
+               AVL nuevoArbolAnarquico;
+
+               while(!Vacio(aux)){
+                         //Dios izquierdoD = *(recienBorrado->izquierdo->dato);
+                         if (nuevoArbolAnarquico.Vacio(nuevoArbolAnarquico.raiz)){
+                              nuevoArbolAnarquico.Insertar(&nuevoDios);
+                         } else if (!Vacio(borrado1->izquierdo)){
+                              Dios izquierdoD = *(borrado1->izquierdo->dato);
+                              nuevoArbolAnarquico.Insertar(&izquierdoD);
+                              //eliminar la parte izquierda del arbol de donde se elimino el dios
+                              if (Buscar(&izquierdoD)){
+                                   eliminados = Borrar(&izquierdoD);
+                              } 
+                         }     
+                         aux = borrado1->izquierdo;  
+               }
+               return nuevoArbolAnarquico;
+          }
+          // void cartaUnion(Dios* arbol, AVL arbol){
+          //      Nodo* aux;
           //      Nodo* recienBorrado = Borrar(arbol);
-          //      AVL nuevoArbolAnarquico;
-          //      nuevoArbolAnarquico.Insertar(borrado);
+          //      aux = recienBorrado;
           // }
 };
 
