@@ -29,8 +29,8 @@ public:
         return nombre;
     }
 
-    void setFieles(int numFieles){
-        fieles=numFieles;
+    void sumarFieles(int numFieles){
+        fieles+=numFieles;
     }
 
     void setNombre(string nombreDios){
@@ -44,18 +44,18 @@ public:
         
 
         fieles+=veintePorciento;
-        perdedor.setFieles(perdedor.getFieles()-veintePorciento);
+        perdedor.sumarFieles(veintePorciento*-1);
         
         return perdedor;
     }
 
 
     Dios cartaTraicion(Dios ganador){
-        int veintePorciento = fieles*0.3;
+        int treintaPorciento = fieles*0.3;
         
 
-        fieles-=veintePorciento;
-        ganador.setFieles(ganador.getFieles()+veintePorciento);
+        fieles-=treintaPorciento;
+        ganador.sumarFieles(treintaPorciento);
         
         return ganador;
     }

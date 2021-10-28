@@ -1,25 +1,66 @@
 #include "Dioses.h" 
+#include "Stack.h"
 
 using namespace std;
 
 int main(){
-     Dios dios1(5000,"Nayat");
+     Dios dios1(5000,"Mariangel");
     
-     Dios dios2(5000,"Atenea");
-     cout <<endl<<endl <<"Antes de la carta de milagro: "<<endl<<endl<<endl;
+     Dios dios2(5000,"Tito");
 
-     cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
+     Stack masoLleno(true);
+     Stack masoRepuesto(1);
 
-     cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl; 
+    for (int i = 0; i < 5; i++)
+    {   Cartas carta = masoLleno.obtenerCarta();
+        masoRepuesto.agregarCarta(carta);
+        if (carta.getTipo()==1)
+        {
+            cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
+            carta.cartaMilagro(dios1,dios2);
+            carta.cartaMilagro(dios1,dios2);
+            cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
+            cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
+        }else if (carta.getTipo()==2)
+        {
+            cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
+            carta.cartaTraicion(dios1,dios2);
+            cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
+            cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
+        }else if (carta.getTipo()==5)
+        {
+            cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
+            Dios nuevo=carta.cartaNuevoDios(dios1,dios2);
+            cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
+            cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
+            cout << "Soy "<< nuevo.getNombre() << " y estos son mis fieles: "<<nuevo.getFieles()<<endl;
+        }else if (carta.getTipo()==7)
+        {
+            cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
+            carta.cartaMuerte(dios1);
+            cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
+            cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
+        }
+        
+    }
+    
+    
+
+
+    //  cout <<endl<<endl <<"Antes de la carta de traicion: "<<endl<<endl<<endl;
+
+    //  cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
+
+    //  cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl; 
      
 
-     dios2 = dios1.cartaMilagro(dios2);
+    //  dios1.cartaMuerte();
+    //  cout <<endl<<endl<<endl;
+    //  cout << "Despues de la carta de muerte: "<<endl<<endl<<endl;
 
-     cout << "Despues de la carta de milagro: "<<endl<<endl<<endl;
+    //  cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl<<endl; 
 
-     cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
-
-     cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl; 
+     //cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl; 
 
      
 
