@@ -17,32 +17,34 @@ int main(){
         if (carta.getTipo()==1)
         {
             cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
-            carta.cartaMilagro(dios1,dios2);
-            carta.cartaMilagro(dios1,dios2);
+            carta.cartaMilagro(&dios1,&dios2);
+            //carta.cartaMilagro(&dios1,&dios2);
             cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
             cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
         }else if (carta.getTipo()==2)
         {
             cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
-            carta.cartaTraicion(dios1,dios2);
+            carta.cartaTraicion(&dios1,&dios2);
             cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
             cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
         }else if (carta.getTipo()==5)
         {
             cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
-            Dios nuevo=carta.cartaNuevoDios(dios1,dios2);
+            Dios nuevo=carta.cartaNuevoDios(&dios1,&dios2);
             cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
             cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
             cout << "Soy "<< nuevo.getNombre() << " y estos son mis fieles: "<<nuevo.getFieles()<<endl;
         }else if (carta.getTipo()==7)
         {
             cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
-            carta.cartaMuerte(dios1);
+            carta.cartaMuerte(&dios1);
             cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
             cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
         }
         
     }
+
+    masoRepuesto.desplegarCartas();
     
     
 

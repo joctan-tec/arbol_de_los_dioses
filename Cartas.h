@@ -34,44 +34,32 @@ public:
             return "muerte";
         }
     }
+    
 
-    Dios cartaMilagro(Dios* ganador,Dios* perdedor){
-        int fielesPerdedor = perdedor.getFieles();
+    void cartaMilagro(Dios* ganador,Dios* perdedor){
+        int fielesPerdedor = perdedor->getFieles();
         int veintePorciento = fielesPerdedor*0.2;
         
-        ganador.sumarFieles(veintePorciento);
-        perdedor.sumarFieles(veintePorciento*-1);
-        return perdedor;
-    }
-
-    Dios cartaTraicion(Dios ganador, Dios perdedor){
-        int treintaPorciento = perdedor.getFieles() *0.3;
+        ganador->sumarFieles(veintePorciento);
+        perdedor->sumarFieles(veintePorciento*-1);
         
+    }
 
-        perdedor.sumarFieles(treintaPorciento*-1);
-        ganador.sumarFieles(treintaPorciento);
+    void cartaTraicion(Dios* ganador, Dios* perdedor){
+        int treintaPorciento = perdedor->getFieles() *0.3;
         
-        return ganador;
+        perdedor->sumarFieles(treintaPorciento*-1);
+        ganador->sumarFieles(treintaPorciento);
     }
 
 
-    Dios cartaNuevoDios(Dios pDiosB, Dios pDiosA){
-        return Dios(pDiosB.getFieles()+pDiosA.getFieles(),"Hijo de "+pDiosB.getNombre()+" y "+pDiosA.getNombre());
+    Dios cartaNuevoDios(Dios* pDiosB, Dios* pDiosA){
+        return Dios(pDiosB->getFieles()+pDiosA->getFieles(),"Hijo de "+pDiosB->getNombre()+" y "+pDiosA->getNombre());
     }
 
-    void cartaMuerte(Dios pDiosA){
-        pDiosA.sumarFieles(pDiosA.getFieles()*0.1);
+    void cartaMuerte(Dios* pDiosA){
+        pDiosA->sumarFieles((pDiosA->getFieles()*0.1)*-1);
     }
-
-
-
-    
-
-    
-
-
-
-
 
 
 };

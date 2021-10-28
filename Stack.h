@@ -79,6 +79,14 @@ public:
         cartas.push(carta);
     }
 
+    void desplegarCartas(){
+        for (int i=1;!cartas.empty();i++){
+            Cartas actual = cartas.top();
+            cout<<i<<". "+actual.getTipoString()<<endl;
+            cartas.pop();
+        }
+    }
+
 
 
 };
