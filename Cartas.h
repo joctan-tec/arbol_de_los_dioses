@@ -1,4 +1,5 @@
 #include "Dioses.h"
+
 using namespace std;
 
 class Cartas
@@ -33,6 +34,7 @@ public:
         case 7:
             return "muerte";
         }
+        return "";
     }
     
 
@@ -60,6 +62,18 @@ public:
     void cartaMuerte(Dios* pDiosA){
         pDiosA->sumarFieles((pDiosA->getFieles()*0.1)*-1);
     }
+
+    // void cartaRetorno(Stack* pilaPrincipal, Stack* pilaReserva){
+    //     pilaPrincipal->regresaCartas(pilaReserva);
+    // }
+
+    void cartaAnarquia(){
+
+    }
+    void cartaUnion(){
+        
+    }
+    
 
 
 };
