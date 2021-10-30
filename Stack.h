@@ -106,7 +106,7 @@ public:
 
     string regresaCartas(Stack* pilaReserva){
         string cartasRegresadas= "Regresamos una carta de: ";
-        for(int contadorCartas=0;!pilaReserva->esVacia()&contadorCartas<4;contadorCartas++){
+        for(int contadorCartas=0;!pilaReserva->esVacia()&contadorCartas<3;contadorCartas++){
             cartas.push(pilaReserva->obtenerCarta());
             cartasRegresadas+=cartas.top().getTipoString()+" - "; 
         }

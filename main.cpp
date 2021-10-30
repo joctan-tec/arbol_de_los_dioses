@@ -12,9 +12,9 @@ int main(){
      //masoLleno.desplegarCartas();
      Stack masoRepuesto(1);
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 35; i++)
     {   Cartas carta = masoLleno.obtenerCarta();
-        masoRepuesto.agregarCarta(carta);
+        
         if (carta.getTipo()==1)
         {
             cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
@@ -63,6 +63,7 @@ int main(){
             cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
             cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
         }
+        masoRepuesto.agregarCarta(carta);
         
     }
 
