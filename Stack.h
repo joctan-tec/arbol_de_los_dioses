@@ -35,7 +35,7 @@ public:
                 cartasTraicion++;
                 cartasTotales++;
                 cout<<carta2.getTipoString() <<":::"<<cartasTraicion<<endl;
-            }else if(numeroRandom==3){
+            }else if(cartasNuevoDios < 4 &&numeroRandom==3){
                 Cartas carta3(5);
                 cartas.push(carta3);
                 cartasNuevoDios++;
@@ -104,19 +104,20 @@ public:
         }
     }
 
-    void regresaCartas(Stack* pilaReserva){
-        stack <Cartas> pilaIntermedia;
-        for(int contadorCartas;!pilaReserva->esVacia()&&contadorCartas<3;contadorCartas++){
-            Cartas cartaTop = pilaReserva->obtenerCarta();
-            pilaIntermedia.push(cartaTop);
+    string regresaCartas(Stack* pilaReserva){
+        string cartasRegresadas= "Regresamos una carta de: ";
+        for(int contadorCartas=0;!pilaReserva->esVacia()&contadorCartas<4;contadorCartas++){
+            cartas.push(pilaReserva->obtenerCarta());
+            cartasRegresadas+=cartas.top().getTipoString()+" - "; 
         }
+        return cartasRegresadas;
 
 
-        for(;pilaIntermedia.size();){
-            cartas.push(pilaIntermedia.top());
-            cout<<"Regresamos una carta de: "<<pilaIntermedia.top().getTipoString();
-            pilaIntermedia.pop();
-        }
+        // for(;pilaIntermedia.size();){
+        //     cartas.push(pilaIntermedia.top());
+        //     cout<<"Regresamos una carta de: "<<pilaIntermedia.top().getTipoString();
+        //     pilaIntermedia.pop();
+        // }
     }
 
 

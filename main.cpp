@@ -9,10 +9,10 @@ int main(){
      Dios dios2(5000,"Tito");
 
      Stack masoLleno(true);
-     masoLleno.desplegarCartas();
+     //masoLleno.desplegarCartas();
      Stack masoRepuesto(1);
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 20; i++)
     {   Cartas carta = masoLleno.obtenerCarta();
         masoRepuesto.agregarCarta(carta);
         if (carta.getTipo()==1)
@@ -49,17 +49,10 @@ int main(){
             cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
             cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
             cout << "Soy "<< nuevo.getNombre() << " y estos son mis fieles: "<<nuevo.getFieles()<<endl;
-        }else if (carta.getTipo()==5)
+        }else if (carta.getTipo()==6)
         {
             cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
-            Dios nuevo=carta.cartaNuevoDios(&dios1,&dios2);
-            cout << "Soy "<< dios2.getNombre()<< " y estos son mis fieles: "<<dios2.getFieles()<<endl; 
-            cout << "Soy "<< dios1.getNombre()<< " y estos son mis fieles: "<<dios1.getFieles()<<endl<<endl<<endl;
-            cout << "Soy "<< nuevo.getNombre() << " y estos son mis fieles: "<<nuevo.getFieles()<<endl;
-        }else if (carta.getTipo()==5)
-        {
-            cout<<"Sacamos una carta de: " << carta.getTipoString()<<endl;
-            masoLleno.regresaCartas(&masoRepuesto);
+            cout<<masoLleno.regresaCartas(&masoRepuesto);
 
             
 
