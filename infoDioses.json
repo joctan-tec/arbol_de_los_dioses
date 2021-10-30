@@ -1,85 +1,46 @@
 {
-    "dioses":
-    [
-      { 
-        "nombre":       "Jesus",
-        "fieles":       "500"
-      },
-      { 
-        "nombre":       "Loki",
-        "fieles":       "750"
-      },
-      { 
-        "nombre":       "Goku",
-        "fieles":       "800"
-      },
-      { 
-        "nombre":       "Freezer",
-        "fieles":       "700"
-      },
-      { 
-        "nombre":       "Naruto",
-        "fieles":       "600"
-      },
-      { 
-        "nombre":       "Ala",
-        "fieles":       "450"
-      },
-      { 
-        "nombre":       "ShengLon",
-        "fieles":       "1500"
-      },
-      { 
-        "nombre":       "Krillin",
-        "fieles":       "1100"
-      },
-      { 
-        "nombre":       "Dionisio",
-        "fieles":       "1400"
-      },
-      { 
-        "nombre":       "Hermes",
-        "fieles":       "7400"
-      },
-      { 
-        "nombre":       "Apolo",
-        "fieles":       "10000"
-      },
-      { 
-        "nombre":       "Zeus",
-        "fieles":       "15200"
-      },
-      { 
-        "nombre":       "Ares",
-        "fieles":       "785000"
-      },
-      { 
-        "nombre":       "Artemisa",
-        "fieles":       "15600"
-      },
-      { 
-        "nombre":       "Poseidon",
-        "fieles":       "85000"
-      },
-      { 
-        "nombre":       "Demeter",
-        "fieles":       "95000"
-      },
-      { 
-        "nombre":       "Nefesto",
-        "fieles":       "557000"
-      },
-      { 
-        "nombre":       "Atenea",
-        "fieles":       "456900"
-      },
-      { 
-        "nombre":       "Hera",
-        "fieles":       "18500"
-      },
-      { 
-        "nombre":       "Afrodita",
-        "fieles":       "165000"
-      }
-    ]
+  "nombre":  [
+              "Sorococo",
+              "Loki",
+              "Thor",
+              "Nefesto",
+              "Goku",
+              "Krillin",
+              "Zeus",
+              "Gandalf",
+              "Afrodita",
+              "Poseidon",
+              "Hermes",
+              "Naruto",
+              "Freezer",
+              "Ala",
+              "Dionisio",
+              "Ares",
+              "Odin",
+              "Artemisa",
+              "Apollo",
+              "Atenea"
+  ],
+  "fieles":   [
+                500,
+                750,
+                800,
+                700,
+                600,
+                450,
+                1500,
+                1100,
+                1400,
+                7400,
+                8541,
+                1503,
+                1000,
+                7855,
+                695,
+                4520,
+                1520,
+                458,
+                475,
+                960
+  ]
 }

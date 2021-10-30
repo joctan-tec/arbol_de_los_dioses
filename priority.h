@@ -21,18 +21,14 @@ bool operator<(const Dios& a, const Dios& b) {
     }
 } 
 
-
 class ColaPrioridad{
     private:
         priority_queue<Dios> colaDioses;
 
     public:
-        ColaPrioridad(){
-            priority_queue<Dios> colaDioses;
-        }
-
-        void add(Dios pDios){
-            colaDioses.push(pDios);
+        void add(Dios* pDios){
+            Dios diosG(pDios->getFieles(),pDios->getNombre());
+            colaDioses.push(diosG);
         }
 
         void elimina(){
