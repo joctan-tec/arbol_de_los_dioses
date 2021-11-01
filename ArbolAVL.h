@@ -266,7 +266,7 @@ class AVL{
 
 
           // Eliminar un elemento de un arbol AVL
-          Nodo* Borrar(Dios* dat) {
+          void Borrar(Dios* dat) {
                Nodo *padre = nullptr;
                Nodo *nodo;
                Dios* aux;
@@ -295,7 +295,6 @@ class AVL{
                               if(padre)
                                    if(padre->derecho == actual) EquilibrarArbol(padre, DERECHO, false);
                                    else                         EquilibrarArbol(padre, IZQUIERDO, false);
-                              return borrado1;
                          }
                          else { // Si el valor esta en el nodo actual, pero no es hoja
                               // Buscar nodo
@@ -332,7 +331,6 @@ class AVL{
                          else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                     }
                }
-               return borrado1;
           }
 
           // Recorrido de arbol en postorden, aplicamos la funcion func, que tiene
@@ -351,43 +349,131 @@ class AVL{
                func( nodo, nodo->FE );
           }
 
-
           //ANARQUIA
-          // Aun se debe checkear unas cosas al retornar y el valor que se da en el .cpp
-          // Reparar algunos errores para que tome todo el nodo como un nodo padre (raiz,izquierdo,derecha)
-          AVL cartaAnarquia(Dios* arbol){
-               Nodo* aux;
+          AVL cartaAnarquia(Dios* dat) {
                Nodo* eliminados;
 
-               //se debe verificar que no sea nullptr o revisar el metodo Borrar
-               Nodo* recienBorrado = Borrar(arbol);
-               //aux = recienBorrado;
+               Nodo* padre = nullptr;
 
-               Dios nuevoDios = *(borrado1->dato);
-               aux = borrado1;
                AVL nuevoArbolAnarquico;
 
-               while(!Vacio(aux)){
-                         //Dios izquierdoD = *(recienBorrado->izquierdo->dato);
-                         if (nuevoArbolAnarquico.Vacio(nuevoArbolAnarquico.raiz)){
-                              nuevoArbolAnarquico.Insertar(&nuevoDios);
-                         } else if (!Vacio(borrado1->izquierdo)){
-                              Dios izquierdoD = *(borrado1->izquierdo->dato);
-                              nuevoArbolAnarquico.Insertar(&izquierdoD);
-                              //eliminar la parte izquierda del arbol de donde se elimino el dios
-                              if (Buscar(&izquierdoD)){
-                                   eliminados = Borrar(&izquierdoD);
-                              } 
-                         }     
-                         aux = borrado1->izquierdo;  
+               Nodo* nodo;
+               Nodo* sEliminar;
+               Dios* aux;
+
+               actual = raiz;
+               // Mientras sea posible que el valor esta en el arbol
+               while (!Vacio(actual)) {
+                    if (dat->getFieles() == actual->dato->getFieles() && dat->getNombre() == actual->dato->getNombre()) { // Si el valor esta en el nodo actual
+                         if (EsHoja(actual)) { // Y si ademas es un nodo hoja: lo borramos
+                              nuevoArbolAnarquico.Insertar(new Dios(actual->dato->getFieles(),actual->dato->getNombre()));
+                              sEliminar = actual;
+                              Borrar(sEliminar->dato);
+                              return nuevoArbolAnarquico;
+
+                              // if(padre) // Si tiene padre (no es el nodo raiz)
+                              //      // Anulamos el puntero que le hace referencia
+                              //      if (padre->derecho == actual) padre->derecho = nullptr;
+                              //      else if(padre->izquierdo == actual) padre->izquierdo = nullptr;
+                              // //guardaBorrado(actual);
+                              // //delete actual; // Borrar el nodo
+                              // //ACA SI ES HOJA PUES UNICAMENTE SE ELIMINA Y SE INSERTA NORMAL AL NUEVO ARBOL
+
+                              // //nuevoArbolAnarquico.Insertar(new Dios(actual->dato->getFieles(),actual->dato->getNombre()));
+                              // actual = nullptr;
+                              // // El nodo padre del actual puede ser ahora un nodo hoja, por lo tanto su
+                              // // FE es cero, pero debemos seguir el camino a partir de su padre, si existe.
+                              // if((padre->derecho == actual && padre->FE == 1) ||
+                              //      (padre->izquierdo == actual && padre->FE == -1)) {
+                              //      padre->FE = 0;
+                              //      actual = padre;
+                              //      padre = actual->padre;
+                              // }
+                              // if(padre)
+                              //      if(padre->derecho == actual) EquilibrarArbol(padre, DERECHO, false);
+                              //      else                         EquilibrarArbol(padre, IZQUIERDO, false);
+
+                              // return nuevoArbolAnarquico;
+                         }
+                         else { // Si el valor esta en el nodo actual, pero no es hoja
+                              // Buscar nodo
+               
+                              //ACA SE TENDRIA QUE HACER LA DIVISION, SE TOMA LA RAIZ (EL ACTUAL) Y LUEGO SE 
+                              // CORTA EL ENLACE CON EL DERECHO PARA INSERTARLOS EN EL ARBOL NUEVAMENTE
+                              //Y LA PARTE IZQUIERDA SE HARIA INSERTAR EN EL ARBOL NUEVO
+                              padre = actual;
+
+                              nuevoArbolAnarquico.Insertar(new Dios(actual->dato->getFieles(),actual->dato->getNombre()));
+
+                              if (actual->izquierdo) {
+                                   nodo = actual->izquierdo;
+                                   nuevoArbolAnarquico.Insertar(new Dios(nodo->dato->getFieles(),nodo->dato->getNombre()));
+                                   sEliminar = actual->izquierdo;
+                                   Borrar(sEliminar->dato);
+                                   //Borrar(nodo->dato);
+                                   while (!Vacio(nodo)) {
+                                        nuevoArbolAnarquico.Insertar(new Dios(nodo->dato->getFieles(),nodo->dato->getNombre()));
+                                        sEliminar = nodo;
+                                        Borrar(sEliminar->dato);
+
+                                        if (nodo->izquierdo) {
+                                             nuevoArbolAnarquico.Insertar(new Dios(nodo->dato->getFieles(),nodo->dato->getNombre()));
+                                             sEliminar = nodo->izquierdo;
+                                             Borrar(sEliminar->dato);
+                                        }
+                                        if (nodo->derecho) {
+                                             nuevoArbolAnarquico.Insertar(new Dios(nodo->dato->getFieles(),nodo->dato->getNombre()));
+                                             sEliminar = nodo->derecho;
+                                             Borrar(sEliminar->dato);
+                                        }
+                                        nodo = nodo->izquierdo;
+                                   }
+
+                              }
+                              actual = sEliminar->padre;
+                              Borrar(actual->dato);
+                         }
+                         
+                         return nuevoArbolAnarquico;
+                    }
+                    else { // Todavia no hemos encontrado el valor, seguir buscandolo
+                         padre = actual;
+                         if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;}
+                         else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
+                    }
                }
+               //aux = recienBorrado;
+
+               // Dios nuevoDios = *(borrado1->dato);
+               // aux = borrado1;     
+
+               // while(!Vacio(aux)){
+               //           //Dios izquierdoD = *(recienBorrado->izquierdo->dato);
+               //           if (nuevoArbolAnarquico.Vacio(nuevoArbolAnarquico.raiz)){
+               //                nuevoArbolAnarquico.Insertar(&nuevoDios);
+               //           } else if (!Vacio(borrado1->izquierdo)){
+               //                Dios izquierdoD = *(borrado1->izquierdo->dato);
+               //                nuevoArbolAnarquico.Insertar(&izquierdoD);
+               //                //eliminar la parte izquierda del arbol de donde se elimino el dios
+               //                if (Buscar(&izquierdoD)){
+               //                     eliminados = Borrar(&izquierdoD);
+               //                } 
+               //           }     
+               //           aux = borrado1->izquierdo;  
+               // 
                return nuevoArbolAnarquico;
           }
-          // void cartaUnion(Dios* arbol, AVL arbol){
-          //      Nodo* aux;
-          //      Nodo* recienBorrado = Borrar(arbol);
-          //      aux = recienBorrado;
-          // }
+
+          // EN LA LOGICA PRINCIPAL HABRIA QUE SACAR LOS DIOSES DE LA COLA, METERLOS EN UNA VARIABLE TEMPORAL, LUEGO MODIFICAR SEGUN LA CARTA, 
+          //LUEGO RECORRER EL VECTOR DE ARBOLES Y BORRAR LOS DIOSES DE SUS ARBOLES CORRESPONDIENTES Y METER LOS DIOSES CON SUS FIELES
+          // MODIFICADOS EN SUS ARBOLES CORRESPONDIENTES. ESTO EN CASO DE LAS CARTAS QUE NO SEAN ANARQUIA NI UNION.
+
+          // Despues de esto se tendria que eliminar en el arbol donde este el Dios B, ese nodo
+          void cartaUnion(Dios* arbol){
+               Nodo* sEliminar;
+               Dios* aux;
+               Insertar(new Dios(arbol->getFieles(),arbol->getNombre()));
+          }
 };
 
 #endif
