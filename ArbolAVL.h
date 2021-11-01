@@ -370,33 +370,8 @@ class AVL{
                               sEliminar = actual;
                               Borrar(sEliminar->dato);
                               return nuevoArbolAnarquico;
-
-                              // if(padre) // Si tiene padre (no es el nodo raiz)
-                              //      // Anulamos el puntero que le hace referencia
-                              //      if (padre->derecho == actual) padre->derecho = nullptr;
-                              //      else if(padre->izquierdo == actual) padre->izquierdo = nullptr;
-                              // //guardaBorrado(actual);
-                              // //delete actual; // Borrar el nodo
-                              // //ACA SI ES HOJA PUES UNICAMENTE SE ELIMINA Y SE INSERTA NORMAL AL NUEVO ARBOL
-
-                              // //nuevoArbolAnarquico.Insertar(new Dios(actual->dato->getFieles(),actual->dato->getNombre()));
-                              // actual = nullptr;
-                              // // El nodo padre del actual puede ser ahora un nodo hoja, por lo tanto su
-                              // // FE es cero, pero debemos seguir el camino a partir de su padre, si existe.
-                              // if((padre->derecho == actual && padre->FE == 1) ||
-                              //      (padre->izquierdo == actual && padre->FE == -1)) {
-                              //      padre->FE = 0;
-                              //      actual = padre;
-                              //      padre = actual->padre;
-                              // }
-                              // if(padre)
-                              //      if(padre->derecho == actual) EquilibrarArbol(padre, DERECHO, false);
-                              //      else                         EquilibrarArbol(padre, IZQUIERDO, false);
-
-                              // return nuevoArbolAnarquico;
                          }
                          else { // Si el valor esta en el nodo actual, pero no es hoja
-                              // Buscar nodo
                
                               //ACA SE TENDRIA QUE HACER LA DIVISION, SE TOMA LA RAIZ (EL ACTUAL) Y LUEGO SE 
                               // CORTA EL ENLACE CON EL DERECHO PARA INSERTARLOS EN EL ARBOL NUEVAMENTE
@@ -410,7 +385,7 @@ class AVL{
                                    nuevoArbolAnarquico.Insertar(new Dios(nodo->dato->getFieles(),nodo->dato->getNombre()));
                                    sEliminar = actual->izquierdo;
                                    Borrar(sEliminar->dato);
-                                   //Borrar(nodo->dato);
+
                                    while (!Vacio(nodo)) {
                                         nuevoArbolAnarquico.Insertar(new Dios(nodo->dato->getFieles(),nodo->dato->getNombre()));
                                         sEliminar = nodo;
@@ -442,25 +417,6 @@ class AVL{
                          else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                     }
                }
-               //aux = recienBorrado;
-
-               // Dios nuevoDios = *(borrado1->dato);
-               // aux = borrado1;     
-
-               // while(!Vacio(aux)){
-               //           //Dios izquierdoD = *(recienBorrado->izquierdo->dato);
-               //           if (nuevoArbolAnarquico.Vacio(nuevoArbolAnarquico.raiz)){
-               //                nuevoArbolAnarquico.Insertar(&nuevoDios);
-               //           } else if (!Vacio(borrado1->izquierdo)){
-               //                Dios izquierdoD = *(borrado1->izquierdo->dato);
-               //                nuevoArbolAnarquico.Insertar(&izquierdoD);
-               //                //eliminar la parte izquierda del arbol de donde se elimino el dios
-               //                if (Buscar(&izquierdoD)){
-               //                     eliminados = Borrar(&izquierdoD);
-               //                } 
-               //           }     
-               //           aux = borrado1->izquierdo;  
-               // 
                return nuevoArbolAnarquico;
           }
 
