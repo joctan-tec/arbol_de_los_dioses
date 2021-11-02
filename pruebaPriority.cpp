@@ -27,6 +27,7 @@ void Mostrar(Nodo* d, int FE)
 
 int main(){
     AVL arbolito;
+    
 
     ColaPrioridad copiaArbol;
     ColaPrioridad colaDioses = leerArchivo();

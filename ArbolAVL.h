@@ -426,8 +426,6 @@ class AVL{
 
           // Despues de esto se tendria que eliminar en el arbol donde este el Dios B, ese nodo
           void cartaUnion(Dios* arbol){
-               Nodo* sEliminar;
-               Dios* aux;
                Insertar(new Dios(arbol->getFieles(),arbol->getNombre()));
           }
 };
