@@ -228,7 +228,7 @@ void init(){
         listaArboles[0] = listaArboles[0].ReconstruyeArbol(copiaArbol);
         
         ///////////////////////// TIEMPO /////////////////////////////
-        this_thread::sleep_for(chrono::milliseconds(1500));
+        this_thread::sleep_for(chrono::milliseconds(3000));
     }
 }
 
