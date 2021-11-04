@@ -5,6 +5,7 @@
 using namespace std;
 
 #include "Dioses.h"
+#include "priority.h"
 
 // Clase Nodo de Arbol AVL:
 class Nodo {
@@ -14,6 +15,7 @@ class Nodo {
           dato(dat), padre(pad), izquierdo(izq), derecho(der), FE(0) {}
      // Miembros:
      Dios* dato;
+
      int FE;
      Nodo* izquierdo;
      Nodo* derecho;
@@ -27,7 +29,6 @@ class AVL{
           // Punteros de la lista, para la raiz y nodo actual:
           Nodo* raiz;
           Nodo* actual;
-          Nodo* borrado1;
           int contador;
           int altura;
 
@@ -40,16 +41,49 @@ class AVL{
                return nodo == nullptr; 
           }
 
+          //Comprueba la raiz
+          Nodo* getRaiz(){
+               return raiz;
+          }
+
           // Comprobar si es un nodo hoja
           bool EsHoja(Nodo* nodo) { 
                return !nodo->derecho && !nodo->izquierdo; 
           }
 
-          //Insertar
+          // Contar el numero de nodos
+          int NumeroNodos() {
+               contador = 0;
+               auxContador(raiz); // Funcion auxiliar
+               return contador;
+          }
+
+          // Funcion auxiliar para contar nodos. Funcion recursiva de recorrido en
+          //   preorden, el proceso es aumentar el contador
+          void auxContador(Nodo* nodo) {
+               contador++;  // Otro nodo
+               // Continuar recorrido
+               if(nodo->izquierdo) auxContador(nodo->izquierdo);
+               if(nodo->derecho)   auxContador(nodo->derecho);
+          }
+
+          // Poda: borrar todos los nodos a partir de uno, incluido
+          void Podar(Nodo* &nodo) {
+          // Algoritmo recursivo, recorrido en postorden
+               if(nodo) {
+                    Podar(nodo->izquierdo); // Podar izquierdo
+                    Podar(nodo->derecho);   // Podar derecho
+                    delete nodo;            // Eliminar nodo
+                    nodo = nullptr;
+               }
+          }
+
+
+          //Inserta un objeto de tipo Dios en el arbol
           void Insertar(Dios* dat){
                Nodo *padre = nullptr;
 
-               cout << "Insertar: " << dat->getFieles() << endl;
+               //cout << "Insertar: " << dat->getFieles() << endl;
                actual = raiz;
                // Buscar el dato en el arbol, manteniendo un puntero al nodo padre
                while( !Vacio(actual) && dat->getFieles() != actual->dato->getFieles() ) {  //modificar nodo
@@ -103,9 +137,15 @@ class AVL{
                                                   // empieza en nodo no ha variado,
                                                   // salir de equilibrar
                     else if(nodo->FE == -2) { // Rotar a derechas y salir:
-                         if(nodo->izquierdo->FE == 1) RDD(nodo); // Rotacion doble
-                         else RSD(nodo);                         // Rotacion simple
-                         salir = true;
+                         try{
+                              if( nodo->izquierdo != nullptr )
+                                   if (nodo->izquierdo->FE == 1)
+                                        RDD(nodo); // Rotacion doble
+                                   else RSD(nodo);                         // Rotacion simple
+                                        salir = true;
+                         } catch (exception e){
+                              RDD(nodo);
+                         }
                     }
                     else if(nodo->FE == 2) {  // Rotar a izquierdas y salir:
                          if(nodo->derecho->FE == -1) RDI(nodo); // Rotacion doble
@@ -120,7 +160,6 @@ class AVL{
 
           // Rotacion doble a derechas
           void RDD(Nodo* nodo) {
-               cout << "RDD" << endl;
                Nodo *Padre = nodo->padre;
                Nodo *P = nodo;
                Nodo *Q = P->izquierdo;
@@ -156,7 +195,6 @@ class AVL{
 
           // Rotacion simple a derechas
           void RSD(Nodo* nodo) {
-               cout << "RSD" << endl;
                Nodo *Padre = nodo->padre;
                Nodo *P = nodo;
                Nodo *Q = P->izquierdo;
@@ -183,7 +221,6 @@ class AVL{
 
           // Rotacion doble a izquierdas
           void RDI(Nodo* nodo) {
-               cout << "RDI" << endl;
                Nodo *Padre = nodo->padre;
                Nodo *P = nodo;
                Nodo *Q = P->derecho;
@@ -219,7 +256,6 @@ class AVL{
 
           // Rotacion simple a izquierdas
           void RSI(Nodo* nodo) {
-               cout << "RSI" << endl;
                Nodo *Padre = nodo->padre;
                Nodo *P = nodo;
                Nodo *Q = P->derecho;
@@ -250,18 +286,11 @@ class AVL{
 
                // Todavia puede aparecer, ya que quedan nodos por mirar
                while(!Vacio(actual)) {
-                    if(dat->getFieles() == actual->dato->getFieles() && dat->getNombre() == actual->dato->getNombre()) {return true;} // dato encontrado
+                    if(dat->getFieles() == actual->dato->getFieles() & dat->getNombre() == actual->dato->getNombre()) {return true;} // dato encontrado
                     else if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;} // Seguir
                     else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                }
                return false; // No esta en arbol
-          }
-
-
-          void guardaBorrado(Nodo* nodo){
-               Nodo* borrado = (Nodo*)malloc(sizeof(Nodo));
-               borrado = nodo;
-               borrado1 = borrado;
           }
 
 
@@ -275,7 +304,6 @@ class AVL{
                // Mientras sea posible que el valor esta en el arbol
                while (!Vacio(actual)) {
                     if (dat->getFieles() == actual->dato->getFieles() && dat->getNombre() == actual->dato->getNombre()) { // Si el valor esta en el nodo actual
-                         guardaBorrado(actual);
                          if (EsHoja(actual)) { // Y si ademas es un nodo hoja: lo borramos
                               if(padre) // Si tiene padre (no es el nodo raiz)
                                    // Anulamos el puntero que le hace referencia
@@ -286,6 +314,11 @@ class AVL{
                               actual = nullptr;
                               // El nodo padre del actual puede ser ahora un nodo hoja, por lo tanto su
                               // FE es cero, pero debemos seguir el camino a partir de su padre, si existe.
+                              if (NumeroNodos() == 1){
+                                   Podar(raiz);
+                                   return;
+                              }
+
                               if((padre->derecho == actual && padre->FE == 1) ||
                                    (padre->izquierdo == actual && padre->FE == -1)) {
                                    padre->FE = 0;
@@ -335,8 +368,8 @@ class AVL{
 
           // Recorrido de arbol en postorden, aplicamos la funcion func, que tiene
           // el prototipo:
-          // void func(int&, int);
-          void PostOrden(void (*func)(Nodo*, int), Nodo* nodo, bool r) {
+          // void func(Nodo&);
+          void PostOrden(void (*func)(Nodo*), Nodo* nodo, bool r) {
                if(r){
                     nodo = raiz;
                }
@@ -346,12 +379,11 @@ class AVL{
                if(nodo->derecho) {
                     PostOrden(func, nodo->derecho, false);
                }
-               func( nodo, nodo->FE );
+               func( nodo );
           }
 
           //ANARQUIA
           AVL cartaAnarquia(Dios* dat) {
-               Nodo* eliminados;
 
                Nodo* padre = nullptr;
 
@@ -359,7 +391,6 @@ class AVL{
 
                Nodo* nodo;
                Nodo* sEliminar;
-               Dios* aux;
 
                actual = raiz;
                // Mientras sea posible que el valor esta en el arbol
@@ -420,13 +451,36 @@ class AVL{
                return nuevoArbolAnarquico;
           }
 
+          AVL ReconstruyeArbol(ColaPrioridad cola){
+               AVL arbolNuevo;
+               for (;!cola.isEmpty();) {               
+                    arbolNuevo.Insertar(new Dios(cola.primero().getFieles(),cola.primero().getNombre()));
+                    cola.elimina();
+               }
+               return arbolNuevo;
+          }
+
+
           // EN LA LOGICA PRINCIPAL HABRIA QUE SACAR LOS DIOSES DE LA COLA, METERLOS EN UNA VARIABLE TEMPORAL, LUEGO MODIFICAR SEGUN LA CARTA, 
           //LUEGO RECORRER EL VECTOR DE ARBOLES Y BORRAR LOS DIOSES DE SUS ARBOLES CORRESPONDIENTES Y METER LOS DIOSES CON SUS FIELES
           // MODIFICADOS EN SUS ARBOLES CORRESPONDIENTES. ESTO EN CASO DE LAS CARTAS QUE NO SEAN ANARQUIA NI UNION.
 
           // Despues de esto se tendria que eliminar en el arbol donde este el Dios B, ese nodo
-          void cartaUnion(Dios* arbol){
-               Insertar(new Dios(arbol->getFieles(),arbol->getNombre()));
+          void auxUnion(Nodo* nodo, AVL* arbolCompleto){
+               if(arbolCompleto->raiz==nullptr){
+                    return;
+               }
+               Nodo* aEliminar;
+               aEliminar = nodo;
+               Insertar(nodo->dato);
+               arbolCompleto->Borrar(aEliminar->dato);
+
+               if(nodo->izquierdo) auxUnion(nodo->izquierdo, arbolCompleto);
+               if(nodo->derecho) auxUnion(nodo->derecho, arbolCompleto);
+          }
+
+          void cartaUnion(AVL* arbol){
+               auxUnion(arbol->raiz, arbol);
           }
 };
 

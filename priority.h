@@ -6,7 +6,7 @@
 #include <queue>
 
 #include "Dioses.h"
-
+ 
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -20,6 +20,7 @@ bool operator<(const Dios& a, const Dios& b) {
         return temp1.nombre.append(temp2.nombre) > temp2.nombre.append(temp1.nombre);
     }
 } 
+
 
 class ColaPrioridad{
     private:

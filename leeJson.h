@@ -1,36 +1,54 @@
+#ifndef _LECTURA_JSON_ 
+#define _LECTURA_JSON_ 1
+
 #include <iostream>
-#include "Dioses.h"     //Esta en el Joctan_Branch
+#include "Dioses.h"
 #include "priority.h"
 
 #include "json-develop/include/nlohmann/json.hpp"   // https://github.com/nlohmann/json/tree/develop/single_include/nlohmann/json.hpp
-#include <fstream>              // ifstream, ofstream
-#include <iomanip>              // std::setw()
-#include <string>
+#include <fstream>                           
+#include <string> 
 #include <vector>
-
+#include <stack>
  
 using json = nlohmann::json;
 using namespace std;
- 
-ColaPrioridad leerArchivo() {
-    // leer configuración desde el archivo
-    ifstream lol ("infoDioses.json");  // Nota aquí es una ruta relativa
-    json j;
-    lol >> j; 
-    lol.close();
 
-    ColaPrioridad colaP;
-    vector<string> nombres = j["nombre"];
-    vector<int> fieles = j["fieles"];
+class LeeJson{
+    private:
+        json archivoJson;
 
-    for (int i = 0; i < nombres.size(); i++){
-        colaP.add(new Dios(fieles[i],nombres[i]));
-    }
+    public:
+        ColaPrioridad leerArchivo(string path) {
+            // leer configuración desde el archivo
+            ifstream lecturaArchivo (path);  // Nota aquí es una ruta relativa
+            lecturaArchivo >> archivoJson;  
+            lecturaArchivo.close();
 
-         // Aviso: 
-         // JSON Standard define objetos como "cero o más pares de nombre / valor".
-         // Si desea mantener la orden de inserción, puede usar TSL :: Ordered_map (integración) o Nlohmann :: FIFO_MAP (integración) y otros contenedores.
-    
-    return colaP;
-    //getchar();
-}
+            ColaPrioridad colaP;
+            vector<string> nombres = archivoJson["nombre"];
+            vector<int> fieles = archivoJson["fieles"];
+
+            for (int elementos = 0; elementos < nombres.size(); elementos++){
+                colaP.add(new Dios(fieles[elementos],nombres[elementos]));
+            }
+            return colaP;
+        }
+
+        stack<string> leerArchivoConStack(string path){
+            // leer configuración desde el archivo
+            ifstream lecturaArchivo (path);  // Nota aquí es una ruta relativa
+            lecturaArchivo >> archivoJson; 
+            lecturaArchivo.close();
+
+            stack<string> pilaNombres;
+            vector<string> nombres = archivoJson["nombresDioses"];
+
+            for (int elementos = 0; elementos < nombres.size(); elementos++){
+                pilaNombres.push(nombres[elementos]);
+            }
+            return pilaNombres;
+        }
+};
+
+#endif
