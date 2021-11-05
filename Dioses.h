@@ -8,13 +8,13 @@ class Dios {
     private:
     
     public:
-
+        //se manejan publicos por motivos de la impresion en el postOrden del arbol
         int fieles;
         string nombre;
 
-        Dios (int numFieles, string nombreDios){
-            fieles = numFieles;
-            nombre = nombreDios;
+        Dios (int pNumFieles, string pNombreDios){
+            fieles = pNumFieles;
+            nombre = pNombreDios;
         }
 
         int getFieles(){
@@ -25,16 +25,16 @@ class Dios {
             return nombre;
         }
 
-        void sumarFieles(int numFieles){
-            fieles+=numFieles;
+        void sumarFieles(int pNumFieles){
+            fieles+=pNumFieles;
         }
 
-        void setFieles(int numFieles){
-            fieles = numFieles;
+        void setFieles(int pNumFieles){
+            fieles = pNumFieles;
         }
 
-        void setNombre(string nombreDios){
-            nombre = nombreDios;
+        void setNombre(string pNombreDios){
+            nombre = pNombreDios;
         }
 };
 

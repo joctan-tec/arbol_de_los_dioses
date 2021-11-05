@@ -11,13 +11,17 @@
 
 using namespace std;
 
-bool operator<(const Dios& a, const Dios& b) {
+//Tomado de:
+//https://stackoverflow.com/questions/19535644/how-to-use-the-priority-queue-stl-for-objects/19535699
 
-    Dios temp1= a,temp2= b;
-    if(a.fieles != b.fieles)
-        return a.fieles < b.fieles;
+//Se aplico la modificacion para el tipo de objeto a trabajar
+bool operator<(const Dios& pDiosA, const Dios& pDiosB) {
+
+    Dios diosTempA = pDiosA, diosTempB = pDiosB;
+    if(pDiosA.fieles != pDiosB.fieles)
+        return pDiosA.fieles < pDiosB.fieles;
     else{
-        return temp1.nombre.append(temp2.nombre) > temp2.nombre.append(temp1.nombre);
+        return diosTempA.nombre.append(diosTempB.nombre) > diosTempB.nombre.append(diosTempA.nombre);
     }
 } 
 
@@ -28,8 +32,8 @@ class ColaPrioridad{
 
     public:
         void add(Dios* pDios){
-            Dios diosG(pDios->getFieles(),pDios->getNombre());
-            colaDioses.push(diosG);
+            Dios diosNuevo(pDios->getFieles(),pDios->getNombre());
+            colaDioses.push(diosNuevo);
         }
 
         void elimina(){
@@ -50,8 +54,8 @@ class ColaPrioridad{
 
         //REVISAR NO FUNCA
         void imprimirCola(){
-            for (int i = 0; i < tamano(); ++i) {
-                cout<<colaDioses.top().nombre<<" "<<colaDioses.top().fieles<<"\n";
+            for (int dios = 0; dios < tamano(); ++dios) {
+                cout<< colaDioses.top().nombre <<" "<< colaDioses.top().fieles <<"\n";
                 colaDioses.pop();
             }
         }
