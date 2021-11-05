@@ -19,9 +19,9 @@ class LeeJson{
         json archivoJson;
 
     public:
-        ColaPrioridad leerArchivo(string path) {
+        ColaPrioridad leerArchivo(string pPath) {
             // leer configuración desde el archivo
-            ifstream lecturaArchivo (path);  // Nota aquí es una ruta relativa
+            ifstream lecturaArchivo (pPath);  // Nota aquí es una ruta relativa
             lecturaArchivo >> archivoJson;  
             lecturaArchivo.close();
 
@@ -35,9 +35,9 @@ class LeeJson{
             return colaP;
         }
 
-        stack<string> leerArchivoConStack(string path){
+        stack<string> leerArchivoConStack(string pPath){
             // leer configuración desde el archivo
-            ifstream lecturaArchivo (path);  // Nota aquí es una ruta relativa
+            ifstream lecturaArchivo (pPath);  // Nota aquí es una ruta relativa
             lecturaArchivo >> archivoJson; 
             lecturaArchivo.close();
 

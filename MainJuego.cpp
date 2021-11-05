@@ -11,22 +11,18 @@
 #include <bits/stdc++.h>
 
 //METODO QUE PERMITE IMPRIMIR LOS DIOSES EN POST ORDEN
-void Mostrar(Nodo* d)
-{
-   cout << "Nombre del Dios:  " <<d->dato->getNombre() << "    Fieles: " <<d->dato->getFieles() << endl;
+void Mostrar(Nodo* pNodo) {
+   cout << "Nombre del Dios:  " << pNodo->dato->getNombre() << "    Fieles: " << pNodo->dato->getFieles() << endl;
 }
 
 using namespace std;
 
-static bool activador = false;
+static bool activador = false;  //este booleano controla la linea del juego
 AVL arbolito;
 vector<AVL> listaArboles; 
 
 void init(){
     int contadorRondas = 1;
-
-    // AVL arbolito;
-    // vector<AVL> listaArboles; 
     Stack cartas(true);
 
     cartas = cartas.mezclarCartas(&cartas);
@@ -82,16 +78,16 @@ void init(){
             cartaSacada.cartaMilagro(&diosA,&diosB);
 
             //Se eliminan del arbol
-            for (int i = 0; i < listaArboles.size(); i++)
+            for (int indiceArboles = 0; indiceArboles < listaArboles.size(); indiceArboles++)
             {
-                if (listaArboles[i].getRaiz() != nullptr & listaArboles[i].Buscar(&diosCopia1))
+                if (listaArboles[indiceArboles].getRaiz() != nullptr & listaArboles[indiceArboles].Buscar(&diosCopia1))
                 {
-                    listaArboles[i].Borrar(&diosCopia1);
-                    contadorDiosA = i;
-                }else if (listaArboles[i].getRaiz() != nullptr & listaArboles[i].Buscar(&diosCopia2))
+                    listaArboles[indiceArboles].Borrar(&diosCopia1);
+                    contadorDiosA = indiceArboles;
+                }else if (listaArboles[indiceArboles].getRaiz() != nullptr & listaArboles[indiceArboles].Buscar(&diosCopia2))
                 {                               
-                    listaArboles[i].Borrar(&diosCopia2);
-                    contadorDiosB = i;
+                    listaArboles[indiceArboles].Borrar(&diosCopia2);
+                    contadorDiosB = indiceArboles;
                 } 
             }
 
@@ -117,16 +113,16 @@ void init(){
 
             cartaSacada.cartaTraicion(&diosA,&diosB);
             //Se eliminan del arbol
-            for (int i = 0; i < listaArboles.size(); i++)
+            for (int indiceArboles = 0; indiceArboles < listaArboles.size(); indiceArboles++)
             {
-                if (listaArboles[i].getRaiz() != nullptr& listaArboles[i].Buscar(&diosCopia1))
+                if (listaArboles[indiceArboles].getRaiz() != nullptr& listaArboles[indiceArboles].Buscar(&diosCopia1))
                 {
-                    listaArboles[i].Borrar(&diosCopia1);
-                    contadorDiosA = i;
-                }else if (listaArboles[i].getRaiz() != nullptr & listaArboles[i].Buscar(&diosCopia2))
+                    listaArboles[indiceArboles].Borrar(&diosCopia1);
+                    contadorDiosA = indiceArboles;
+                }else if (listaArboles[indiceArboles].getRaiz() != nullptr & listaArboles[indiceArboles].Buscar(&diosCopia2))
                 {                               
-                    listaArboles[i].Borrar(&diosCopia2);
-                    contadorDiosB = i;
+                    listaArboles[indiceArboles].Borrar(&diosCopia2);
+                    contadorDiosB = indiceArboles;
                 } 
             }
 
@@ -165,10 +161,10 @@ void init(){
 
             Dios nuevo = cartaSacada.cartaNuevoDios(nombresSecundarios.top(),&diosA,&diosB);
             nombresSecundarios.pop();   //sacamos el nombre que utilizamos
-            for (int i = 0; i < listaArboles.size(); i++)
+            for (int indiceArboles = 0; indiceArboles < listaArboles.size(); indiceArboles++)
             {
-                if (listaArboles[i].getRaiz() != nullptr & listaArboles[i].Buscar(&diosCopia1)) {
-                    listaArboles[i].Insertar(&nuevo);
+                if (listaArboles[indiceArboles].getRaiz() != nullptr & listaArboles[indiceArboles].Buscar(&diosCopia1)) {
+                    listaArboles[indiceArboles].Insertar(&nuevo);
                 }
             }
             copiaArbol.add(new Dios(nuevo.getFieles(),nuevo.getNombre()));
@@ -196,16 +192,16 @@ void init(){
 
             cartaSacada.cartaMuerte(&diosA);
             //Se elimina el dios del arbol
-            for (int i = 0; i < listaArboles.size(); i++)
+            for (int indiceArboles1 = 0; indiceArboles1 < listaArboles.size(); indiceArboles1++)
             {
-                if (listaArboles[i].getRaiz() != nullptr & listaArboles[i].Buscar(&diosCopia1)) {
-                    listaArboles[i].Borrar(&diosCopia1);
-                    contadorDiosA = i;
-                    for (int j = 0; j < listaArboles.size(); j++)
+                if (listaArboles[indiceArboles1].getRaiz() != nullptr & listaArboles[indiceArboles1].Buscar(&diosCopia1)) {
+                    listaArboles[indiceArboles1].Borrar(&diosCopia1);
+                    contadorDiosA = indiceArboles1;
+                    for (int indiceArboles2 = 0; indiceArboles2 < listaArboles.size(); indiceArboles2++)
                     {
-                        if (listaArboles[j].getRaiz() != nullptr & listaArboles[j].Buscar(&diosCopia2)) {
-                            listaArboles[j].Borrar(&diosCopia2);
-                            contadorDiosB = j;
+                        if (listaArboles[indiceArboles2].getRaiz() != nullptr & listaArboles[indiceArboles2].Buscar(&diosCopia2)) {
+                            listaArboles[indiceArboles2].Borrar(&diosCopia2);
+                            contadorDiosB = indiceArboles2;
                         }
                     } 
                 }
@@ -243,6 +239,5 @@ int main(){
 
     cout << "*************************      R E S U L T A D O S        *************************" << endl;
     listaArboles[0].PostOrden(Mostrar,nullptr,true);
-
 
 }

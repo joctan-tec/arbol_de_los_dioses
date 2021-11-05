@@ -11,8 +11,8 @@ using namespace std;
 class Nodo {
   public:
      // Constructor:
-     Nodo(Dios* dat, Nodo* pad=nullptr, Nodo* izq=nullptr, Nodo* der=nullptr):
-          dato(dat), padre(pad), izquierdo(izq), derecho(der), FE(0) {}
+     Nodo(Dios* pDataNueva, Nodo* pad=nullptr, Nodo* izq=nullptr, Nodo* der=nullptr):
+          dato(pDataNueva), padre(pad), izquierdo(izq), derecho(der), FE(0) {}
      // Miembros:
      Dios* dato;
 
@@ -47,8 +47,8 @@ class AVL{
           }
 
           // Comprobar si es un nodo hoja
-          bool EsHoja(Nodo* nodo) { 
-               return !nodo->derecho && !nodo->izquierdo; 
+          bool EsHoja(Nodo* pNodo) { 
+               return !pNodo->derecho && !pNodo->izquierdo; 
           }
 
           // Contar el numero de nodos
@@ -60,44 +60,42 @@ class AVL{
 
           // Funcion auxiliar para contar nodos. Funcion recursiva de recorrido en
           //   preorden, el proceso es aumentar el contador
-          void auxContador(Nodo* nodo) {
+          void auxContador(Nodo* pNodo) {
                contador++;  // Otro nodo
                // Continuar recorrido
-               if(nodo->izquierdo) auxContador(nodo->izquierdo);
-               if(nodo->derecho)   auxContador(nodo->derecho);
+               if(pNodo->izquierdo) auxContador(pNodo->izquierdo);
+               if(pNodo->derecho)   auxContador(pNodo->derecho);
           }
 
-          // Poda: borrar todos los nodos a partir de uno, incluido
-          void Podar(Nodo* &nodo) {
+          // Poda: borrar todos los nodos a partir de uno
+          void Podar(Nodo* &pNodo) {
           // Algoritmo recursivo, recorrido en postorden
-               if(nodo) {
-                    Podar(nodo->izquierdo); // Podar izquierdo
-                    Podar(nodo->derecho);   // Podar derecho
-                    delete nodo;            // Eliminar nodo
-                    nodo = nullptr;
+               if(pNodo) {
+                    Podar(pNodo->izquierdo); // Podar izquierdo
+                    Podar(pNodo->derecho);   // Podar derecho
+                    delete pNodo;            // Eliminar nodo
+                    pNodo = nullptr;
                }
           }
 
 
           //Inserta un objeto de tipo Dios en el arbol
-          void Insertar(Dios* dat){
+          void Insertar(Dios* pDataNueva){
                Nodo *padre = nullptr;
-
-               //cout << "Insertar: " << dat->getFieles() << endl;
                actual = raiz;
                // Buscar el dato en el arbol, manteniendo un puntero al nodo padre
-               while( !Vacio(actual) && dat->getFieles() != actual->dato->getFieles() ) {  //modificar nodo
+               while( !Vacio(actual) && pDataNueva->getFieles() != actual->dato->getFieles() ) {  //modificar nodo
                     padre = actual;
-                    if( dat->getFieles() > actual->dato->getFieles() ) actual = actual->derecho;
-                    else if( dat->getFieles() <= actual->dato->getFieles() ) actual = actual->izquierdo;
+                    if( pDataNueva->getFieles() > actual->dato->getFieles() ) actual = actual->derecho;
+                    else if( pDataNueva->getFieles() <= actual->dato->getFieles() ) actual = actual->izquierdo;
                }
 
                // Si el elemento es igual a la raiz
                // se inserta a la izquierda
                if (actual != nullptr){
-                    if ( dat->getFieles() == actual->dato->getFieles() ){
+                    if ( pDataNueva->getFieles() == actual->dato->getFieles() ){
                          padre = actual;
-                         if ( dat->getFieles() == actual->dato->getFieles() ) actual = actual->izquierdo;
+                         if ( pDataNueva->getFieles() == actual->dato->getFieles() ) actual = actual->izquierdo;
                     }
                }
                // Si se ha encontrado el elemento, regresar sin insertar
@@ -106,69 +104,69 @@ class AVL{
                }
                // Si padre es nulo, entonces el arbol estaba vacio, el nuevo nodo sera
                // el nodo raiz
-               if(Vacio(padre)) raiz = new Nodo(dat);
+               if(Vacio(padre)) raiz = new Nodo(pDataNueva);
                // Si el dato es menor que el que contiene el nodo padre, lo insertamos
                // en la rama izquierda
-               else if(dat->getFieles() <= padre->dato->getFieles()) {
-                    padre->izquierdo = new Nodo(dat, padre);
+               else if(pDataNueva->getFieles() <= padre->dato->getFieles()) {
+                    padre->izquierdo = new Nodo(pDataNueva, padre);
                     EquilibrarArbol(padre, IZQUIERDO, true);
                }
                // Si el dato es mayor que el que contiene el nodo padre, lo insertamos
                // en la rama derecha
-               else if(dat->getFieles() > padre->dato->getFieles()) {
-                    padre->derecho = new Nodo(dat, padre);
+               else if(pDataNueva->getFieles() > padre->dato->getFieles()) {
+                    padre->derecho = new Nodo(pDataNueva, padre);
                     EquilibrarArbol(padre, DERECHO, true);
                }
           }
 
           // Equilibrar arbol AVL partiendo del nodo nuevo
-          void EquilibrarArbol(Nodo* nodo, int rama, bool nuevo){
+          void EquilibrarArbol(Nodo* pNodo, int pRama, bool pNuevo){
                bool salir = false;
 
                // Recorrer camino inverso actualizando valores de FE:
-               while(nodo && !salir) {
-                    if(nuevo)
-                    if(rama == IZQUIERDO) nodo->FE--; // Depende de si anadimos ...
-                    else                  nodo->FE++;
+               while(pNodo && !salir) {
+                    if(pNuevo)
+                    if(pRama == IZQUIERDO) pNodo->FE--; // Depende de si anadimos ...
+                    else                  pNodo->FE++;
                     else
-                    if(rama == IZQUIERDO) nodo->FE++; // ... o borramos
-                    else                  nodo->FE--;
-                    if(nodo->FE == 0) salir = true; // La altura de las rama que
+                    if(pRama == IZQUIERDO) pNodo->FE++; // ... o borramos
+                    else                  pNodo->FE--;
+                    if(pNodo->FE == 0) salir = true; // La altura de las rama que
                                                   // empieza en nodo no ha variado,
                                                   // salir de equilibrar
-                    else if(nodo->FE == -2) { // Rotar a derechas y salir:
+                    else if(pNodo->FE == -2) { // Rotar a derechas y salir:
                          try{
-                              if( nodo->izquierdo != nullptr )
-                                   if (nodo->izquierdo->FE == 1)
-                                        RDD(nodo); // Rotacion doble
-                                   else RSD(nodo);                         // Rotacion simple
+                              if( pNodo->izquierdo != nullptr )
+                                   if (pNodo->izquierdo->FE == 1)
+                                        RDD(pNodo); // Rotacion doble
+                                   else RSD(pNodo);                         // Rotacion simple
                                         salir = true;
                          } catch (exception e){
-                              RDD(nodo);
+                              RDD(pNodo);
                          }
                     }
-                    else if(nodo->FE == 2) {  // Rotar a izquierdas y salir:
-                         if(nodo->derecho->FE == -1) RDI(nodo); // Rotacion doble
-                         else RSI(nodo);                        // Rotacion simple
+                    else if(pNodo->FE == 2) {  // Rotar a izquierdas y salir:
+                         if(pNodo->derecho->FE == -1) RDI(pNodo); // Rotacion doble
+                         else RSI(pNodo);                        // Rotacion simple
                          salir = true;
                     }
-                    if(nodo->padre) 
-                    if(nodo->padre->derecho == nodo) rama = DERECHO; else rama = IZQUIERDO;
-                    nodo = nodo->padre; // Calcular FE, siguiente nodo del camino.
+                    if(pNodo->padre) 
+                    if(pNodo->padre->derecho == pNodo) pRama = DERECHO; else pRama = IZQUIERDO;
+                    pNodo = pNodo->padre; // Calcular FE, siguiente nodo del camino.
                }   
           }
 
           // Rotacion doble a derechas
-          void RDD(Nodo* nodo) {
-               Nodo *Padre = nodo->padre;
-               Nodo *P = nodo;
+          void RDD(Nodo* pNodo) {
+               Nodo *Padre = pNodo->padre;
+               Nodo *P = pNodo;
                Nodo *Q = P->izquierdo;
                Nodo *R = Q->derecho;
                Nodo *B = R->izquierdo;
                Nodo *C = R->derecho;
 
                if(Padre) 
-                    if(Padre->derecho == nodo) Padre->derecho = R;
+                    if(Padre->derecho == pNodo) Padre->derecho = R;
                     else Padre->izquierdo = R;
                else raiz = R;
 
@@ -194,9 +192,9 @@ class AVL{
           }
 
           // Rotacion simple a derechas
-          void RSD(Nodo* nodo) {
-               Nodo *Padre = nodo->padre;
-               Nodo *P = nodo;
+          void RSD(Nodo* pNodo) {
+               Nodo *Padre = pNodo->padre;
+               Nodo *P = pNodo;
                Nodo *Q = P->izquierdo;
                Nodo *B = Q->derecho;
 
@@ -220,16 +218,16 @@ class AVL{
           }
 
           // Rotacion doble a izquierdas
-          void RDI(Nodo* nodo) {
-               Nodo *Padre = nodo->padre;
-               Nodo *P = nodo;
+          void RDI(Nodo* pNodo) {
+               Nodo *Padre = pNodo->padre;
+               Nodo *P = pNodo;
                Nodo *Q = P->derecho;
                Nodo *R = Q->izquierdo;
                Nodo *B = R->izquierdo;
                Nodo *C = R->derecho;
 
                if(Padre)
-                    if(Padre->derecho == nodo) Padre->derecho = R;
+                    if(Padre->derecho == pNodo) Padre->derecho = R;
                     else Padre->izquierdo = R;
                else raiz = R;
 
@@ -255,9 +253,9 @@ class AVL{
           }
 
           // Rotacion simple a izquierdas
-          void RSI(Nodo* nodo) {
-               Nodo *Padre = nodo->padre;
-               Nodo *P = nodo;
+          void RSI(Nodo* pNodo) {
+               Nodo *Padre = pNodo->padre;
+               Nodo *P = pNodo;
                Nodo *Q = P->derecho;
                Nodo *B = Q->izquierdo;
 
@@ -281,29 +279,29 @@ class AVL{
           }
 
           // Buscar un valor en el arbol
-          bool Buscar(Dios* dat) {
+          bool Buscar(Dios* pDataNueva) {
                actual = raiz;
 
                // Todavia puede aparecer, ya que quedan nodos por mirar
                while(!Vacio(actual)) {
-                    if(dat->getFieles() == actual->dato->getFieles() & dat->getNombre() == actual->dato->getNombre()) {return true;} // dato encontrado
-                    else if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;} // Seguir
-                    else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
+                    if(pDataNueva->getFieles() == actual->dato->getFieles() & pDataNueva->getNombre() == actual->dato->getNombre()) {return true;} // dato encontrado
+                    else if(pDataNueva->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;} // Seguir
+                    else if(pDataNueva->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                }
                return false; // No esta en arbol
           }
 
 
           // Eliminar un elemento de un arbol AVL
-          void Borrar(Dios* dat) {
+          void Borrar(Dios* pDataNueva) {
                Nodo *padre = nullptr;
                Nodo *nodo;
-               Dios* aux;
+               Dios* auxDios;
 
                actual = raiz;
                // Mientras sea posible que el valor esta en el arbol
                while (!Vacio(actual)) {
-                    if (dat->getFieles() == actual->dato->getFieles() && dat->getNombre() == actual->dato->getNombre()) { // Si el valor esta en el nodo actual
+                    if (pDataNueva->getFieles() == actual->dato->getFieles() && pDataNueva->getNombre() == actual->dato->getNombre()) { // Si el valor esta en el nodo actual
                          if (EsHoja(actual)) { // Y si ademas es un nodo hoja: lo borramos
                               if(padre) // Si tiene padre (no es el nodo raiz)
                                    // Anulamos el puntero que le hace referencia
@@ -352,16 +350,16 @@ class AVL{
                               // y continuar, cerrando el bucle. El nodo encontrado no tiene
                               // por que ser un nodo hoja, cerrando el bucle nos aseguramos
                               // de que solo se eliminan nodos hoja.
-                              aux = actual->dato;
+                              auxDios = actual->dato;
                               actual->dato = nodo->dato;
-                              nodo->dato = aux;
+                              nodo->dato = auxDios;
                               actual = nodo;
                          }
                     }
                     else { // Todavia no hemos encontrado el valor, seguir buscandolo
                          padre = actual;
-                         if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;}
-                         else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
+                         if(pDataNueva->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;}
+                         else if(pDataNueva->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                     }
                }
           }
@@ -369,21 +367,21 @@ class AVL{
           // Recorrido de arbol en postorden, aplicamos la funcion func, que tiene
           // el prototipo:
           // void func(Nodo&);
-          void PostOrden(void (*func)(Nodo*), Nodo* nodo, bool r) {
-               if(r){
-                    nodo = raiz;
+          void PostOrden(void (*func)(Nodo*), Nodo* pNodo, bool pRecorrer) {
+               if(pRecorrer){
+                    pNodo = raiz;
                }
-               if(nodo->izquierdo) {
-                    PostOrden(func, nodo->izquierdo, false);
+               if(pNodo->izquierdo) {
+                    PostOrden(func, pNodo->izquierdo, false);
                }
-               if(nodo->derecho) {
-                    PostOrden(func, nodo->derecho, false);
+               if(pNodo->derecho) {
+                    PostOrden(func, pNodo->derecho, false);
                }
-               func( nodo );
+               func( pNodo );
           }
 
           //ANARQUIA
-          AVL cartaAnarquia(Dios* dat) {
+          AVL cartaAnarquia(Dios* pDataNueva) {
 
                Nodo* padre = nullptr;
 
@@ -395,7 +393,7 @@ class AVL{
                actual = raiz;
                // Mientras sea posible que el valor esta en el arbol
                while (!Vacio(actual)) {
-                    if (dat->getFieles() == actual->dato->getFieles() && dat->getNombre() == actual->dato->getNombre()) { // Si el valor esta en el nodo actual
+                    if (pDataNueva->getFieles() == actual->dato->getFieles() && pDataNueva->getNombre() == actual->dato->getNombre()) { // Si el valor esta en el nodo actual
                          if (EsHoja(actual)) { // Y si ademas es un nodo hoja: lo borramos
                               nuevoArbolAnarquico.Insertar(new Dios(actual->dato->getFieles(),actual->dato->getNombre()));
                               sEliminar = actual;
@@ -444,18 +442,18 @@ class AVL{
                     }
                     else { // Todavia no hemos encontrado el valor, seguir buscandolo
                          padre = actual;
-                         if(dat->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;}
-                         else if(dat->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
+                         if(pDataNueva->getFieles() > actual->dato->getFieles()) {actual = actual->derecho;}
+                         else if(pDataNueva->getFieles() <= actual->dato->getFieles()) {actual = actual->izquierdo;}
                     }
                }
                return nuevoArbolAnarquico;
           }
 
-          AVL ReconstruyeArbol(ColaPrioridad cola){
+          AVL ReconstruyeArbol(ColaPrioridad pCola){
                AVL arbolNuevo;
-               for (;!cola.isEmpty();) {               
-                    arbolNuevo.Insertar(new Dios(cola.primero().getFieles(),cola.primero().getNombre()));
-                    cola.elimina();
+               for (;!pCola.isEmpty();) {               
+                    arbolNuevo.Insertar(new Dios(pCola.primero().getFieles(),pCola.primero().getNombre()));
+                    pCola.elimina();
                }
                return arbolNuevo;
           }
@@ -466,21 +464,21 @@ class AVL{
           // MODIFICADOS EN SUS ARBOLES CORRESPONDIENTES. ESTO EN CASO DE LAS CARTAS QUE NO SEAN ANARQUIA NI UNION.
 
           // Despues de esto se tendria que eliminar en el arbol donde este el Dios B, ese nodo
-          void auxUnion(Nodo* nodo, AVL* arbolCompleto){
-               if(arbolCompleto->raiz==nullptr){
+          void auxUnion(Nodo* pNodo, AVL* pArbolCompleto){
+               if(pArbolCompleto->raiz==nullptr){
                     return;
                }
                Nodo* aEliminar;
-               aEliminar = nodo;
-               Insertar(nodo->dato);
-               arbolCompleto->Borrar(aEliminar->dato);
+               aEliminar = pNodo;
+               Insertar(pNodo->dato);
+               pArbolCompleto->Borrar(aEliminar->dato);
 
-               if(nodo->izquierdo) auxUnion(nodo->izquierdo, arbolCompleto);
-               if(nodo->derecho) auxUnion(nodo->derecho, arbolCompleto);
+               if(pNodo->izquierdo) auxUnion(pNodo->izquierdo, pArbolCompleto);
+               if(pNodo->derecho) auxUnion(pNodo->derecho, pArbolCompleto);
           }
 
-          void cartaUnion(AVL* arbol){
-               auxUnion(arbol->raiz, arbol);
+          void cartaUnion(AVL* pArbol){
+               auxUnion(pArbol->raiz, pArbol);
           }
 };
 
